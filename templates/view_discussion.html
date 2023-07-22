@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>{{ discussion.title }}</h1>
+  <p>{{ discussion.short_description }}</p>
+  {% if discussion.image %}
+    <img src="{{ discussion.image.url }}" alt="{{ discussion.title }} Image">
+  {% endif %}
+
+  <!-- Display comments -->
+  <h2>Comments</h2>
+  <div id="comment-list">
+    {% for comment in comments %}
+      <div class="comment">
+        <p>{{ comment.text }}</p>
+        <p>Posted by {{ comment.user.username }} at {{ comment.timestamp }}</p>
+        <hr>
+        <!-- Display replies to the comment -->
+        <div class="reply-list">
+          {% for reply in comment.replies.all %}
+            <div class="reply">
+              <p>{{ reply.text }}</p>
+              <p>Posted by {{ reply.user.username }} at {{ reply.timestamp }}</p>
+            </div>
+          {% empty %}
+            <p>No replies yet.</p>
+          {% endfor %}
+        </div>
+
+        <!-- Reply form for each comment -->
+        <form class="reply-form" data-comment-id="{{ comment.id }}">
+          {% csrf_token %}
+          {{ reply_form.as_p }}
+          <button type="submit">Post Reply</button>
+        </form>
+        <hr>
+      </div>
+    {% empty %}
+      <p>No comments yet.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Comment form -->
+  <form id="comment-form" method="post" data-discussion-id="{{ discussion.id }}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Post Comment</button>
+  </form>
+
+  <script src="{% static 'js/ajax_comments.js' %}"></script>
+{% endblock %}

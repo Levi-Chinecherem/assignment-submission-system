@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>User Profile</h1>
+  {% if user_profile %}
+    <div>
+      <h2>{{ user_profile.user.username }}</h2>
+      {% if user_profile.profile_image %}
+        <img src="{{ user_profile.profile_image.url }}" alt="Profile Image">
+      {% endif %}
+      <p><strong>Full Name:</strong> {{ user_profile.full_name }}</p>
+      <p><strong>Email:</strong> {{ user_profile.user.email }}</p>
+      <p><strong>Address:</strong> {{ user_profile.address }}</p>
+      <p><strong>Short Description:</strong> {{ user_profile.short_description }}</p>
+      <p><strong>Is Lecturer:</strong> {% if user_profile.is_lecturer %}Yes{% else %}No{% endif %}</p>
+    </div>
+  {% else %}
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ profile_form.as_p }}
+      <button type="submit">Save Profile</button>
+    </form>
+  {% endif %}
+{% endblock %}

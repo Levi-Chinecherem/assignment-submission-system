@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignment Submission and Feedback System</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- jQuery CDN and custom JavaScript for AJAX handling -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-KyZXEAg4fM3SInw6XEgd6jpJ4BA3Eo4eW8bZ0UF6D60=" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    <header>
+        <!-- Your header content here -->
+    </header>
+
+    <nav>
+        <ul>
+            <!-- Common navigation links here -->
+            <li><a href="{% url 'home' %}">Home</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'view_profile' %}">Profile</a></li>
+                {% if user.profile.is_lecturer %}
+                    <li><a href="{% url 'view_all_submitted_assignments' %}">View All Submitted Assignments</a></li>
+                    <li><a href="{% url 'view_all_marked_assignments' %}">View All Marked Assignments</a></li>
+                {% else %}
+                    <li><a href="{% url 'view_courses' %}">View My Courses</a></li>
+                    <li><a href="{% url 'post_assignment' %}">Post Assignment</a></li>
+                {% endif %}
+                <li><a href="{% url 'user_logout' %}">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'user_signup' %}">Sign Up</a></li>
+                <li><a href="{% url 'user_login' %}">Login</a></li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Your footer content here -->
+    </footer>
+</body>
+</html>

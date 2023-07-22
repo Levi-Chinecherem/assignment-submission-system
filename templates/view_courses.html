@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>View Courses</h1>
+  <form id="view-courses-form" method="post">
+    {% csrf_token %}
+    <label for="level">Level:</label>
+    <select name="level" id="level" required>
+      <option value="">Select Level</option>
+      <option value="100">100 Level</option>
+      <option value="200">200 Level</option>
+      <!-- Add options for other levels -->
+    </select>
+
+    <label for="department">Department:</label>
+    <select name="department" id="department" required>
+      <option value="">Select Department</option>
+      <!-- Add options for departments -->
+    </select>
+
+    <label for="semester">Semester:</label>
+    <select name="semester" id="semester" required>
+      <option value="">Select Semester</option>
+      <option value="First">First Semester</option>
+      <option value="Second">Second Semester</option>
+      <!-- Add options for other semesters -->
+    </select>
+
+    <button type="submit">View Courses</button>
+  </form>
+
+  <div id="courses-list">
+    <h2>Your Courses</h2>
+    <ul id="courses-results">
+      <!-- Courses will be dynamically loaded here -->
+    </ul>
+  </div>
+
+  <script>
+    // AJAX for handling form submission without page reload
+    $(document).ready(function() {
+      $('#view-courses-form').on('submit', function(event) {
+        event.preventDefault();
+        const formData = $(this).serialize();
+
+        $.ajax({
+          url: '{% url "view_courses" %}',
+          type: 'POST',
+          data: formData,
+          success: function(response) {
+            $('#courses-results').html(response);
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

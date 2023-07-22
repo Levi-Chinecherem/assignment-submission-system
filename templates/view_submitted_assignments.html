@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>All Submitted Assignments</h1>
+  <button id="toggle-btn" onclick="toggleAssignments()">Show Marked</button>
+
+  <div id="marked-assignments" style="display: none;">
+    <h2>Marked Assignments</h2>
+    <ul>
+      {% for assignment in submitted_assignments|marked_assignments %}
+        <li>{{ assignment.assignment.title }}</li>
+        <li>Total Score: {{ assignment.total_score }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div id="unmarked-assignments">
+    <h2>Unmarked Assignments</h2>
+    <ul>
+      {% for assignment in submitted_assignments|unmarked_assignments %}
+        <li>{{ assignment.assignment.title }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <script>
+    function toggleAssignments() {
+      const markedAssignments = document.getElementById('marked-assignments');
+      const unmarkedAssignments = document.getElementById('unmarked-assignments');
+      const toggleButton = document.getElementById('toggle-btn');
+
+      if (markedAssignments.style.display === 'none') {
+        markedAssignments.style.display = 'block';
+        unmarkedAssignments.style.display = 'none';
+        toggleButton.innerText = 'Show Unmarked';
+      } else {
+        markedAssignments.style.display = 'none';
+        unmarkedAssignments.style.display = 'block';
+        toggleButton.innerText = 'Show Marked';
+      }
+    }
+  </script>
+{% endblock %}

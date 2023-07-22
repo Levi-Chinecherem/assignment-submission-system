@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Mark Assignment - {{ submitted_assignment.assignment.title }}</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="total_score">Total Score:</label>
+    <input type="number" name="total_score" id="total_score" required>
+    <button type="submit">Save Score</button>
+  </form>
+{% endblock %}

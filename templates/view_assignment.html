@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ assignment.title }}</h1>
+  <p><strong>Course:</strong> {{ assignment.course }}</p>
+  <p><strong>Semester:</strong> {{ assignment.semester }}</p>
+  <p><strong>Level:</strong> {{ assignment.level }}</p>
+  <p><strong>Department:</strong> {{ assignment.department }}</p>
+  <p><strong>Lecturer:</strong> {{ assignment.lecturer }}</p>
+  <p><strong>Document:</strong> <a href="{{ assignment.document.url }}" target="_blank">Download Assignment</a></p>
+  {% if request.user == assignment.lecturer %}
+    <a href="{% url 'delete_assignment' assignment.id %}">Delete Assignment</a>
+  {% endif %}
+  <!-- Additional content or comments/replies here -->
+{% endblock %}
