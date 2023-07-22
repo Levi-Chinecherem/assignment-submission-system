@@ -2,6 +2,8 @@
 
 The Assignment Submission and Feedback System is a web application built using Django, a Python web framework. The system provides a platform for students to submit their assignments, lecturers to post assignments, and facilitate discussions between students and lecturers. This README file provides a comprehensive guide to understanding and using the system.
 
+![Preview](https://github.com/Levi-Chinecherem/assignment-submission-system/blob/master/sample.PNG)
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
