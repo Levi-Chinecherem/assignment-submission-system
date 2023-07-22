@@ -174,3 +174,97 @@ body {
     padding: 10px;
     background-color: #f8f8f8;
   }
+
+/* Add your existing styles here */
+
+/* Responsive Navigation */
+nav {
+  background-color: #333;
+  color: #fff;
+  position: relative;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo a {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.navbar-links {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.navbar-links li {
+  list-style: none;
+}
+
+.navbar-links a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+}
+
+/* Hamburger Icon */
+.navbar-toggle-icon {
+  cursor: pointer;
+  display: none;
+}
+
+.navbar-toggle-icon span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  margin: 5px 0;
+}
+
+/* Media Query for Responsive Navigation */
+@media screen and (max-width: 768px) {
+  .navbar-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    text-align: center;
+  }
+
+  .navbar-links li {
+    margin: 10px 0;
+  }
+
+  .navbar-links a {
+    padding: 10px;
+    display: inline;
+  }
+
+  .navbar-toggle-icon {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+  }
+
+  #navbar-toggle {
+    display: none;
+  }
+
+  #navbar-toggle:checked + .navbar-links {
+    display: block;
+  }
+}

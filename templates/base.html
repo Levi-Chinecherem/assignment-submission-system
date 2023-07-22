@@ -1,37 +1,55 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Assignment Submission and Feedback System</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <!-- jQuery CDN and custom JavaScript for AJAX handling -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-KyZXEAg4fM3SInw6XEgd6jpJ4BA3Eo4eW8bZ0UF6D60=" crossorigin="anonymous"></script>
-    
 </head>
 <body>
     <header>
         <!-- Your header content here -->
     </header>
 
+    <!-- Responsive Navigation -->
     <nav>
-        <ul>
-            <!-- Common navigation links here -->
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'view_profile' %}">Profile</a></li>
-                {% if user.profile.is_lecturer %}
-                    <li><a href="{% url 'view_all_submitted_assignments' %}">View All Submitted Assignments</a></li>
-                    <li><a href="{% url 'view_all_marked_assignments' %}">View All Marked Assignments</a></li>
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="{% url 'home' %}">Assignment System</a>
+            </div>
+            <label for="navbar-toggle" class="navbar-toggle-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <input style="display:none" type="checkbox" id="navbar-toggle">
+            <ul class="navbar-links">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'view_profile' %}">Profile</a></li>
+                    <li><a href="{% url 'list_all_discussions' %}">Join Discussions</a></li>
+                    {% if user.profile.is_lecturer %}
+                        <li><a href="{% url 'view_all_submitted_assignments' %}">Submitted Assignments</a></li>
+                        <li><a href="{% url 'view_all_marked_assignments' %}">Marked Assignments</a></li>
+                        <li><a href="{% url 'post_assignment' %}">Post Assignment</a></li>
+                        <li><a href="{% url 'post_discussion' %}">Post Discussions</a></li>
+                        {% if assignment.id %}
+                            <li>
+                                <a href="{% url 'mark_assignment' assignment.id %}">Mark Assignment {{ assignment.id }}</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="{% url 'list_assignments' %}">Assignments</a></li>
+                        <li><a href="{% url 'view_courses' %}">Courses</a></li>
+                        <li><a href="{% url 'view_all_my_marked_assignments' %}">Review Assignments</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'user_logout' %}">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'view_courses' %}">View My Courses</a></li>
-                    <li><a href="{% url 'post_assignment' %}">Post Assignment</a></li>
+                    <li><a href="{% url 'user_signup' %}">Sign Up</a></li>
+                    <li><a href="{% url 'user_login' %}">Login</a></li>
                 {% endif %}
-                <li><a href="{% url 'user_logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'user_signup' %}">Sign Up</a></li>
-                <li><a href="{% url 'user_login' %}">Login</a></li>
-            {% endif %}
-
-        </ul>
+            </ul>
+        </div>
     </nav>
 
     <main class="container">

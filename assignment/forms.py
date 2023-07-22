@@ -1,8 +1,14 @@
 from django import forms
-from .models import Comment, Reply, Profile, Assignment, SubmittedAssignment, Discussion
+from .models import Comment, Reply, Profile, Assignment, SubmittedAssignment, Discussion, Course, Level, Semester, Department
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+
+class AssignmentFilterForm(forms.Form):
+    level = forms.ModelChoiceField(queryset=Level.objects.all())
+    semester = forms.ModelChoiceField(queryset=Semester.objects.all())
+    department = forms.ModelChoiceField(queryset=Department.objects.all())
+      
 class SubmittedAssignmentForm(forms.ModelForm):
     class Meta:
         model = SubmittedAssignment

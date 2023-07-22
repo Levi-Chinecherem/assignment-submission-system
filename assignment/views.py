@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .models import Course, Assignment, Discussion, Profile, SubmittedAssignment, Comment, Reply
-from .forms import AssignmentForm, DiscussionForm, UserSignUpForm, UserProfileForm, CommentForm, ReplyForm
+from .forms import AssignmentForm, AssignmentFilterForm, DiscussionForm, UserSignUpForm, UserProfileForm, CommentForm, ReplyForm
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
@@ -80,6 +80,11 @@ def add_discussion(request):
     else:
         form = DiscussionForm()
     return render(request, 'post_discussion.html', {'form': form})
+
+@login_required
+def list_all_discussions(request):
+    discussions = Discussion.objects.all()
+    return render(request, 'list_all_discussions.html', {'discussions': discussions})
 
 @login_required
 def view_discussion(request, discussion_id):
@@ -181,6 +186,13 @@ def add_assignment(request):
         form = AssignmentForm()
     return render(request, 'post_assignment.html', {'form': form})
 
+@login_required
+@user_passes_test(is_lecturer)
+def view_all_submitted_assignments(request):
+    submitted_assignments = SubmittedAssignment.objects.filter(submitted_by=request.user)
+    return render(request, 'view_all_submitted_assignments.html', {
+        'submitted_assignments': submitted_assignments,
+    })
 
 @login_required
 def submit_assignment(request, assignment_id):
@@ -198,6 +210,43 @@ def submit_assignment(request, assignment_id):
         form = SubmittedAssignmentForm()
     return render(request, 'submit_assignment.html', {'form': form, 'assignment': assignment})
 
+@login_required
+def view_assignment(request, assignment_id):
+    # Retrieve the assignment using the assignment_id or return a 404 error if not found
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+
+    return render(request, 'view_assignment.html', {'assignment': assignment})
+
+@login_required
+def list_assignments(request):
+    levels = Course.objects.values_list('level', flat=True).distinct()
+    semesters = Course.objects.values_list('semester', flat=True).distinct()
+    departments = Course.objects.values_list('department', flat=True).distinct()
+
+    if request.method == 'POST':
+        form = AssignmentFilterForm(request.POST)
+        if form.is_valid():
+            level = form.cleaned_data['level']
+            semester = form.cleaned_data['semester']
+            department = form.cleaned_data['department']
+
+            assignments = Assignment.objects.filter(course__level=level, course__semester=semester, course__department=department)
+        else:
+            assignments = Assignment.objects.all()
+    else:
+        assignments = Assignment.objects.all()
+        form = AssignmentFilterForm()
+
+    context = {
+        'assignments': assignments,
+        'levels': levels,
+        'semesters': semesters,
+        'departments': departments,
+        'form': form,
+    }
+    return render(request, 'list_assignments.html', context)
+
+   
 @login_required
 @user_passes_test(is_lecturer)  # Only lecturers can access this view
 def view_submitted_assignments(request, assignment_id):
@@ -224,8 +273,8 @@ def delete_assignment(request, assignment_id):
 
 @login_required
 @user_passes_test(is_lecturer)
-def mark_assignment(request, submitted_assignment_id):
-    submitted_assignment = get_object_or_404(SubmittedAssignment, id=submitted_assignment_id)
+def mark_assignment(request, assignment_id):
+    submitted_assignment = get_object_or_404(SubmittedAssignment, id=assignment_id)
 
     if request.method == 'POST':
         total_score = request.POST.get('total_score')
@@ -251,7 +300,19 @@ def view_all_marked_assignments(request):
         'unmarked_assignments': unmarked_assignments
     })
 
+@login_required
+def view_all_my_marked_assignments(request):
+    if request.user.profile.is_lecturer:
+        return redirect('home')
 
+    marked_assignments = SubmittedAssignment.objects.filter(assignment__lecturer=request.user, is_marked=True)
+    unmarked_assignments = SubmittedAssignment.objects.filter(assignment__lecturer=request.user, is_marked=False)
+    return render(request, 'view_all_my_marked_assignments.html', {
+        'marked_assignments': marked_assignments,
+        'unmarked_assignments': unmarked_assignments
+    })
+    
+    
 # AUTHENTICATIONS
 def user_signup(request):
     if request.method == 'POST':
@@ -281,4 +342,4 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     messages.success(request, 'Logged out successfully!')
-    return redirect('login')
+    return redirect('home')

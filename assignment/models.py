@@ -14,7 +14,7 @@ LEVEL_CHOICES = [
 ]
 
 class Level(models.Model):
-    name = models.CharField(max_length=50, choices=LEVEL_CHOICES)
+    name = models.CharField(max_length=100, choices=LEVEL_CHOICES)
 
     def __str__(self):
         return self.name
@@ -28,7 +28,7 @@ class Department(models.Model):
 
 
 class Semester(models.Model):
-    name = models.CharField(max_length=10, choices=SEMESTER_CHOICES)
+    name = models.CharField(max_length=100, choices=SEMESTER_CHOICES)
 
     def __str__(self):
         return self.name
@@ -49,7 +49,7 @@ class Assignment(models.Model):
     title = models.CharField(max_length=100)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    level = models.CharField(max_length=3, choices=LEVEL_CHOICES)
+    level = models.CharField(max_length=50, choices=LEVEL_CHOICES)
     lecturer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignments')
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     document = models.FileField(upload_to='assignments/')

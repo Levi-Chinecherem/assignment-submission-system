@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>All Discussions</h1>
+  <ul>
+    {% for discussion in discussions %}
+      <li>
+        <a href="{% url 'view_discussion' discussion.id %}">
+          {{ discussion.title }}
+        </a>
+      </li>
+    {% empty %}
+      <li>No discussions found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

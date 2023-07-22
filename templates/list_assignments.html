@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>List of Assignments</h1>
+  <form id="filter-form" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Filter</button>
+  </form>
+
+  <div id="assignments-list">
+    {% for assignment in assignments %}
+      <div class="assignment">
+        <h2>{{ assignment.title }}</h2>
+        <p>Course: {{ assignment.course.title }}</p>
+        <p>Lecturer: {{ assignment.lecturer }}</p>
+        <a href="{% url 'view_assignment' assignment.id %}">View Assignment</a>
+      </div>
+    {% empty %}
+      <p>No assignments found.</p>
+    {% endfor %}
+  </div>
+
+  <script>
+    // Submit the form using AJAX on filter selection
+    const filterForm = document.getElementById('filter-form');
+    const assignmentsList = document.getElementById('assignments-list');
+    filterForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(filterForm);
+      const url = filterForm.getAttribute('data-url');
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => response.text())
+      .then(data => {
+        assignmentsList.innerHTML = data;
+      });
+    });
+  </script>
+{% endblock %}

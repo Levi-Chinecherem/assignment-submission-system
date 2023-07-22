@@ -44,12 +44,12 @@ class DiscussionAdmin(admin.ModelAdmin):
 admin.site.register(Discussion, DiscussionAdmin)
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['discussion', 'user', 'created_at']
+    list_display = ['discussion', 'user']
 
 admin.site.register(Comment, CommentAdmin)
 
 class ReplyAdmin(admin.ModelAdmin):
-    list_display = ['comment', 'user', 'created_at']
+    list_display = ['comment', 'user']
 
 admin.site.register(Reply, ReplyAdmin)
 

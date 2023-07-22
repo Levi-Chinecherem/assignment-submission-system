@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <h1>View All Marked Assignments</h1>
+  <div class="view-all-marked-assignments">
+    <div class="marked-assignments-list">
+      <h2>Marked Assignments</h2>
+      {% for assignment in marked_assignments %}
+        <div class="marked-assignment-item">
+          <h3>{{ assignment.assignment.title }}</h3>
+          <p><strong>Course:</strong> {{ assignment.assignment.course }}</p>
+          <p><strong>Semester:</strong> {{ assignment.assignment.semester }}</p>
+          <p><strong>Level:</strong> {{ assignment.assignment.level }}</p>
+          <p><strong>Department:</strong> {{ assignment.assignment.department }}</p>
+          <p><strong>Lecturer:</strong> {{ assignment.assignment.lecturer }}</p>
+          <p><strong>Document:</strong> <a href="{{ assignment.assignment.document.url }}" target="_blank">Download Assignment</a></p>
+          <!-- Add additional details or links for marked assignments as needed -->
+        </div>
+      {% empty %}
+        <p>No marked assignments available.</p>
+      {% endfor %}
+    </div>
+    <div class="marked-assignments-list">
+      <h2>Unmarked Assignments</h2>
+      {% for assignment in unmarked_assignments %}
+        <div class="unmarked-assignment-item">
+          <h3>{{ assignment.assignment.title }}</h3>
+          <p><strong>Course:</strong> {{ assignment.assignment.course }}</p>
+          <p><strong>Semester:</strong> {{ assignment.assignment.semester }}</p>
+          <p><strong>Level:</strong> {{ assignment.assignment.level }}</p>
+          <p><strong>Department:</strong> {{ assignment.assignment.department }}</p>
+          <p><strong>Lecturer:</strong> {{ assignment.assignment.lecturer }}</p>
+          <p><strong>Document:</strong> <a href="{{ assignment.assignment.document.url }}" target="_blank">Download Assignment</a></p>
+          <!-- Add additional details or links for unmarked assignments as needed -->
+        </div>
+      {% empty %}
+        <p>No unmarked assignments available.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
